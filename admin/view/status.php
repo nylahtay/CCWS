@@ -27,115 +27,115 @@
     <tbody>
     <tr>
         <td>1,001</td>
-        <td>random</td>
+        <td>Nylah Rogers</td>
         <td>data</td>
         <td>placeholder</td>
-        <td>text</td>
+        <td>Checked In</td>
     </tr>
     <tr>
         <td>1,002</td>
-        <td>placeholder</td>
+        <td>Janice Longbottom</td>
         <td>irrelevant</td>
         <td>visual</td>
-        <td>layout</td>
+        <td>Checked In</td>
     </tr>
     <tr>
         <td>1,003</td>
-        <td>data</td>
+        <td>Jimmy Jackson</td>
         <td>rich</td>
         <td>dashboard</td>
-        <td>tabular</td>
+        <td>Reserved</td>
     </tr>
     <tr>
         <td>1,003</td>
-        <td>information</td>
+        <td>John Doe</td>
         <td>placeholder</td>
         <td>illustrative</td>
-        <td>data</td>
+        <td>Checked In</td>
     </tr>
     <tr>
         <td>1,004</td>
-        <td>text</td>
+        <td>June Berry</td>
         <td>random</td>
         <td>layout</td>
-        <td>dashboard</td>
+        <td>Checked In</td>
     </tr>
     <tr>
         <td>1,005</td>
-        <td>dashboard</td>
+        <td>Darin Done</td>
         <td>irrelevant</td>
         <td>text</td>
-        <td>placeholder</td>
+        <td>Checked In</td>
     </tr>
     <tr>
         <td>1,006</td>
-        <td>dashboard</td>
+        <td>Jenny Kilmer</td>
         <td>illustrative</td>
         <td>rich</td>
-        <td>data</td>
+        <td>Checked In</td>
     </tr>
     <tr>
         <td>1,007</td>
-        <td>placeholder</td>
+        <td>Janice Smith</td>
         <td>tabular</td>
         <td>information</td>
-        <td>irrelevant</td>
+        <td>Checked In</td>
     </tr>
     <tr>
         <td>1,008</td>
-        <td>random</td>
+        <td>Lou Smith</td>
         <td>data</td>
         <td>placeholder</td>
-        <td>text</td>
+        <td>Checked In</td>
     </tr>
     <tr>
         <td>1,009</td>
-        <td>placeholder</td>
+        <td>Justice Taylor</td>
         <td>irrelevant</td>
         <td>visual</td>
-        <td>layout</td>
+        <td>Reserved</td>
     </tr>
     <tr>
         <td>1,010</td>
-        <td>data</td>
+        <td>Sam Lord</td>
         <td>rich</td>
         <td>dashboard</td>
-        <td>tabular</td>
+        <td>Reserved</td>
     </tr>
     <tr>
         <td>1,011</td>
-        <td>information</td>
+        <td>Curtis Steller</td>
         <td>placeholder</td>
         <td>illustrative</td>
-        <td>data</td>
+        <td>Checked In</td>
     </tr>
     <tr>
         <td>1,012</td>
-        <td>text</td>
+        <td>Matt Iceman</td>
         <td>placeholder</td>
         <td>layout</td>
-        <td>dashboard</td>
+        <td>Checked In</td>
     </tr>
     <tr>
         <td>1,013</td>
-        <td>dashboard</td>
+        <td>Laurie Simpson</td>
         <td>irrelevant</td>
         <td>text</td>
-        <td>visual</td>
+        <td>Checked In</td>
     </tr>
     <tr>
         <td>1,014</td>
-        <td>dashboard</td>
+        <td>Candice Rude</td>
         <td>illustrative</td>
         <td>rich</td>
-        <td>data</td>
+        <td>Checked In</td>
     </tr>
     <tr>
         <td>1,015</td>
-        <td>random</td>
+        <td>Frank Dod</td>
         <td>tabular</td>
         <td>information</td>
-        <td>text</td>
+        <td>Checked In</td>
     </tr>
     </tbody>
 </table>

@@ -1,11 +1,16 @@
-<?php 
-// $guest= $data['console'];
-// $dt = new DateTime($console->getRelease());
+<?php
+$conn = new Mysql();
 
+//get the location id ('loc=') from the url
+$id = filter_input(INPUT_GET, 'loc');
+//if id is not null, then load the location up
+if (!is_null($id))  $location = $conn->getLocationById($id) ;
+var_dump($location);
+$guests = $conn->getGuests();
 ?>
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Revive 66 Campground</h1>
+        <h1 class="h2"><?php echo $location->getName(); ?></h1>
         <div class="btn-toolbar mb-2 mb-md-0">
          
         </div>

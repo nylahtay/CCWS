@@ -1,3 +1,9 @@
+<?php
+$conn = new Mysql();
+$locations = $conn->getLocations();
+?>
+
+
 <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
                 <div class="position-sticky pt-3 sidebar-sticky d-flex flex-column p-3">
                     <ul class="nav flex-column">
@@ -15,10 +21,12 @@
                         </button>
                         <div class="collapse show" id="locations-collapse" style="">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                            <li><a href="?action=checkin" class="link-dark d-inline-flex text-decoration-none rounded">Revive 66 Campground</a></li>
-                            <li><a href="?action=checkin" class="link-dark d-inline-flex text-decoration-none rounded">East Sunshine Church of Christ</a></li>
-                            <li><a href="?action=checkin" class="link-dark d-inline-flex text-decoration-none rounded">Grace United Methodist Church</a></li>
-                            <li><a href="?action=checkin" class="link-dark d-inline-flex text-decoration-none rounded">Asbury United Methodist</a></li>
+                            <?php foreach ($locations as $location) :
+                                $name = $location->getName();
+                                $id = $location->getId();
+                            ?>
+                            <li><a href="?action=location&loc=<?php echo $id; ?>" class="link-dark d-inline-flex text-decoration-none rounded"><?php echo $name; ?></a></li>
+                            <?php endforeach; ?>
                         </ul>
                         </div>
                     </li>

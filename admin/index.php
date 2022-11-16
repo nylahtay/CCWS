@@ -16,6 +16,14 @@ if ($action === NULL) {
         $action = 'dashboard';
     }
 }
+var_dump( $_POST);
+// var_dump( 
+//     filter_input(INPUT_POST, 'inputFirstName'),
+//  filter_input(INPUT_POST, 'inputLastName'),
+//  filter_input(INPUT_POST, 'inputAddress'),
+//  filter_input(INPUT_POST, 'inputPet'),
+//  filter_input(INPUT_POST, 'inputFamily'),
+// );
 
 
 switch ($action) {
@@ -24,6 +32,9 @@ switch ($action) {
     break;
     case 'newreservation':
         getLayout('main', 'newreservation.php', NULL , ['title'=> 'Admin Dashboard'], ['css'=>'../css/admin.css']); 
+    break;
+    case 'newguest':
+        getLayout('main', 'newguest.php', NULL , ['title'=> 'Admin Dashboard'], ['css'=>'../css/admin.css']); 
     break;
     case 'status':
         getLayout('main', 'status.php', NULL , ['title'=> 'Admin Dashboard'], ['css'=>'../css/admin.css']); 

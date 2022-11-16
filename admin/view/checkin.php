@@ -9,7 +9,7 @@
 <h1>Guest Check-In</h1>
 
 <form class="row g-2">
-    <label for="exampleDataList" class="form-label">Search Reservations</label>
+    <label for="exampleDataList" class="form-label">Search Guests</label>
     <div class="input-group">
         <input class="form-control col-auto" list="datalistOptions" id="exampleDataList" placeholder="Type to search...">
         <datalist id="datalistOptions">
@@ -24,4 +24,4 @@
     
 </form>
 
-<a href="?action=newreservation" class="btn btn-outline-secondary my-4"> New Reservation </a>
+<a href="?action=newguest" class="btn btn-outline-secondary my-4"> New Guest </a>

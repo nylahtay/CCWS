@@ -164,7 +164,6 @@ body {
   main {
     height: 100vh;
     height: -webkit-fill-available;
-    max-height: 100vh;
     overflow-x: auto;
     overflow-y: hidden;
   }
@@ -215,3 +214,21 @@ body {
 /***
  * End of Sidebars
  */
+
+
+.status {
+    font-size: 1.30rem;
+    border-radius: 0.25em;
+    padding: 0.25rem;
+    box-sizing: border-box;
+    float: right;
+    margin-left: 1rem;
+}
+
+ .status.Open {
+   background: #d2f4ea;
+ }
+
+ .status.Closed {
+    background: #ffb0b0;
+ }

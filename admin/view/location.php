@@ -4,13 +4,17 @@ $conn = new Mysql();
 //get the location id ('loc=') from the url
 $id = filter_input(INPUT_GET, 'loc');
 //if id is not null, then load the location up
-if (!is_null($id))  $location = $conn->getLocationById($id) ;
+
+//set the processing date
+$date = '2022-11-15';
+
+if (!is_null($id))  $location = $conn->getLocationFull($id,$date) ;
 var_dump($location);
 $guests = $conn->getGuests();
 ?>
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2"><?php echo $location->getName(); ?></h1>
+    <h1 class="h2"><?php echo $location->getName(); ?><span class="status <?php echo $location->getStatusString(); ?>"><?php echo $location->getStatusString(); ?><span></h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
             <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
@@ -40,11 +44,11 @@ $guests = $conn->getGuests();
         </tr>
         <tr>
           <th scope="row">Checked in Guests</th>
-          <td><a href="?action=status&loc=<?php echo $location->getId(); ?>">34</a></td>
+          <td><a href="?action=status&loc=<?php echo $id; ?>"><?php echo $location->getCapacity()-$location->getAvailability(); ?></a></td>
         </tr>
         <tr>
           <th scope="row">Available Beds</th>
-          <td><a href="#">6</a></td>
+          <td><a href="#"><?php echo $location->getAvailability(); ?></a></td>
         </tr>
       </tbody>
     </table>
@@ -54,8 +58,8 @@ $guests = $conn->getGuests();
 
     <form class="row g-2">
         <div class="input-group">
-            <input class="form-control col-auto" list="datalistOptions" id="exampleDataList" placeholder="Type to search...">
-            <datalist id="datalistOptions">
+            <input class="form-control col-auto" list="stafflistOptions" id="exampleDataList" placeholder="Type to search...">
+            <datalist id="stafflistOptions">
                 <option value="Nylah Rogers">
                 <option value="Diane Love">
                 <option value="Sam Matthews">
@@ -79,13 +83,11 @@ $guests = $conn->getGuests();
 
 <form class="row g-2">
     <div class="input-group">
-        <input class="form-control col-auto" list="datalistOptions" id="exampleDataList" placeholder="Search Guests...">
-        <datalist id="datalistOptions">
-            <option value="Nylah Rogers">
-            <option value="Diane Love">
-            <option value="Sam Matthews">
-            <option value="Berry Johnson">
-            <option value="Wilma Lewis">
+        <input class="form-control col-auto" list="guestlistOptions" id="exampleDataList" placeholder="Search Guests...">
+        <datalist id="guestlistOptions">
+            <?php foreach ($guests as $guest) : ?>
+            <option value="<?php echo $guest->getFirstName() . ' ' . $guest->getLastName();?>">
+            <?php endforeach; ?>
         </datalist>
         <div class="input-group-text"><a class="btn ">Check-In</a></div>
     </div>    

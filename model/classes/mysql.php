@@ -155,6 +155,32 @@ class Mysql extends Dbconfig
 
 
 
+
+    //Method to retrive get the guests status for a location
+    function getGuestStatus($id, $date)
+    {
+        //create array of guest objects
+        $guestStatus = array();
+
+        //Database connection
+        $this->connect();
+        $this->sqlQuery = "SELECT u.usr_fname, u.usr_lname, gs.gs_checkin, gs.gs_checkout, gs.usr_id FROM guest_status as gs JOIN users as u ON u.usr_id = gs.usr_id WHERE loc_id = $id and gs_op_date = '$date'";
+        $result = $this->conn->query($this->sqlQuery);
+
+        //add each row into a new guest object in the array
+        while ($row = $result->fetch_assoc()) {
+            $guestStatus[] = [$row['usr_fname'] . ' ' . $row['usr_lname'], $row['gs_checkin'], $row['gs_checkout'], $row['usr_id']];
+        }
+
+        //disconnect from the DB
+        self::disconnect();
+
+        //return the array of Guest objects
+        return $guestStatus;
+    }
+
+
+
      //Method to retrive all the Locations in the DB
     //This method returns an array of all the locations as Location objects.
     function getLocations()
@@ -164,12 +190,12 @@ class Mysql extends Dbconfig
 
         //Database connection
         $this->connect();
-        $this->sqlQuery = "SELECT loc_id, loc_name, loc_address_street, loc_address_street_2, loc_address_city, loc_address_state, loc_serves, loc_capacity FROM location";
+        $this->sqlQuery = "SELECT loc_id, loc_name, loc_address_street, loc_address_street_2, loc_address_city, loc_address_state, loc_serves, loc_capacity, loc_status FROM location";
         $result = $this->conn->query($this->sqlQuery);
 
         //add each row into a new guest object in the array
         while ($row = $result->fetch_assoc()) {
-            $location = new Location($row['loc_id'], $row['loc_name'], $row['loc_address_street'], $row['loc_address_street_2'], $row['loc_address_city'], $row['loc_address_state'], NULL,  NULL,  $row['loc_serves'],  $row['loc_capacity']);
+            $location = new Location($row['loc_id'], $row['loc_name'], $row['loc_address_street'], $row['loc_address_street_2'], $row['loc_address_city'], $row['loc_address_state'], NULL,  NULL,  $row['loc_serves'],  $row['loc_capacity'], $row['loc_status']);
             $locations[] = $location;
         }
 
@@ -188,17 +214,85 @@ class Mysql extends Dbconfig
     {
         //Database connection
         $this->connect();
-        $this->sqlQuery = "SELECT loc_id, loc_name, loc_address_street, loc_address_street_2, loc_address_city, loc_address_state, loc_serves, loc_capacity FROM location WHERE loc_id = $id;";
+        $this->sqlQuery = "SELECT loc_id, loc_name, loc_address_street, loc_address_street_2, loc_address_city, loc_address_state, loc_serves, loc_capacity, loc_status FROM location WHERE loc_id = $id;";
         $result = $this->conn->query($this->sqlQuery);
 
         //add each row into a new Customer object
         $row = $result->fetch_assoc();
-        $location =  new Location($row['loc_id'], $row['loc_name'], $row['loc_address_street'], $row['loc_address_street_2'], $row['loc_address_city'], $row['loc_address_state'], NULL,  NULL,  $row['loc_serves'],  $row['loc_capacity']);
+        $location =  new Location($row['loc_id'], $row['loc_name'], $row['loc_address_street'], $row['loc_address_street_2'], $row['loc_address_city'], $row['loc_address_state'], NULL,  NULL,  $row['loc_serves'],  $row['loc_capacity'], $row['loc_status']);
 
         //disconnect from the DB
         self::disconnect();
 
         //return the Customer object
+        return $location;
+    }
+
+
+    //todo need to figure out a better way to do this in sql
+    function getLocationsFull( $date)
+    {
+        //$locationIds is an array of ids as INTs
+        $locationIds = array();
+        $locations = self::getLocations();
+        foreach ($locations as $location)
+        {
+            $locationIds[]=$location->getId(); 
+        }
+        //date is a operating date in the format YYYY-MM-DD
+
+        //create array of location objects
+        $locationsFull = array();
+
+        
+
+        //Database connection
+        $this->connect();
+
+        //loop through each location id
+        foreach ($locationIds as $id)
+        {
+
+            $this->sqlQuery = "SELECT loc_id, loc_name, loc_address_street, loc_address_street_2, loc_address_city, loc_address_state, loc_serves, loc_capacity, loc_status, loc_capacity-(SELECT count(usr_id) FROM guest_status WHERE loc_id = $id AND gs_op_date = '$date' AND gs_checkout IS NULL) AS loc_availability FROM location WHERE loc_id = $id";
+            $result = $this->conn->query($this->sqlQuery);
+
+            //add each row into a new guest object in the array
+            while ($row = $result->fetch_assoc()) {
+                $location = new Location($row['loc_id'], $row['loc_name'], $row['loc_address_street'], $row['loc_address_street_2'], $row['loc_address_city'], $row['loc_address_state'], NULL,  NULL,  $row['loc_serves'],  $row['loc_capacity'], $row['loc_status']);
+                $location->setAvailability($row['loc_availability']);
+                $locationsFull[] = $location;
+            }
+
+        }
+
+        //disconnect from the DB
+        self::disconnect();
+
+        //return the array of Guest objects
+        return $locationsFull;
+    }
+
+
+    //todo need to figure out a better way to do this in sql
+    function getLocationFull($id, $date)
+    {
+    
+        //Database connection
+        $this->connect();
+
+        $this->sqlQuery = "SELECT loc_id, loc_name, loc_address_street, loc_address_street_2, loc_address_city, loc_address_state, loc_serves, loc_capacity, loc_status, loc_capacity-(SELECT count(usr_id) FROM guest_status WHERE loc_id = $id AND gs_op_date = '$date' AND gs_checkout IS NULL) AS loc_availability FROM location WHERE loc_id = $id";
+        $result = $this->conn->query($this->sqlQuery);
+
+        //add each row into a new guest object in the array
+        while ($row = $result->fetch_assoc()) {
+            $location = new Location($row['loc_id'], $row['loc_name'], $row['loc_address_street'], $row['loc_address_street_2'], $row['loc_address_city'], $row['loc_address_state'], NULL,  NULL,  $row['loc_serves'],  $row['loc_capacity'], $row['loc_status']);
+            $location->setAvailability($row['loc_availability']);
+        }
+
+        //disconnect from the DB
+        self::disconnect();
+
+        //return the array of Guest objects
         return $location;
     }
 

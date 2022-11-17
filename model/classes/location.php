@@ -42,6 +42,15 @@ class Location
     // Property for location capacity (number of beds), Type: int 
     private $capacity;
 
+    // Property for location Status Type: BOOLEAN
+    private $status;
+
+    // Property for location Status Type: INT
+    private $cur_occupancy;
+
+    // Property for location Status Type: INT
+    private $availability;
+
     //Property for Notes Type: String
     private $notes;
 
@@ -51,7 +60,7 @@ class Location
 
 
     //Class Constructor
-    function __construct($id, $name, $address1, $address2, $address3, $address4, $phone=NULL, $email=NULL, $serves, $capacity) 
+    function __construct($id, $name, $address1, $address2, $address3, $address4, $phone=NULL, $email=NULL, $serves, $capacity, $status) 
     {
         $this->id = $id;
         $this->name = $name;
@@ -63,6 +72,7 @@ class Location
         $this->email = $email = NULL;
         $this->serves = $serves;
         $this->capacity = $capacity;
+        $this->status = $status;
     }
 
     /**
@@ -82,6 +92,27 @@ class Location
         return $this->name;
     }
 
+    function getCapacity()
+    {
+        return $this->capacity;
+    }
+
+    //Function gets the status as a string of "Closed/Open"
+    function getStatusString()
+    {
+        return ($this->status == 0) ?  "Closed" :  "Open";
+    }
+
+    function getCurrOccupancy()
+    {
+        return $this->cur_occupancy;
+    }
+
+    function getAvailability()
+    {
+        return $this->availability;
+    }
+
 
     /**
      * Setters
@@ -93,4 +124,18 @@ class Location
         $this->id = $id;
     }
 
+    //Expects an Integer for Current Occupancy
+    function setCurrentOccupancy($occup)
+    {
+        $this->cur_occupancy = $occup;
+    }
+
+    //Expects an Integer for Current Availavility
+    function setAvailability($avail)
+    {
+        $this->availability = $avail;
+    }
+
+
+  
 }

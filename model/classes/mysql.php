@@ -96,8 +96,8 @@ class Mysql extends Dbconfig
     }
 
 
-    //Method to create an appointment
-    //This method creates an appointment.
+    //Method to create a guest
+    //This method creates a guest.
     function createGuest($org_id, $usr_username = null, $usr_password = null, $usr_auth = 3, $usr_email = null, $usr_phone = null, $usr_fname = null, $usr_lname = null, $usr_profile_img = NULL, $usr_notes = null, $guest_birthdate = null, $guest_pet = 0, $guest_family_group=0)
     {
 
@@ -155,7 +155,7 @@ class Mysql extends Dbconfig
 
 
 
-    //Method to Check in Guests using the location id and user id
+    //Method to Check in Guests
     function checkinGuest($org_id,$loc_id, $usr_id, $op_date, $checkin)
     {
         //create array of guest objects
@@ -179,7 +179,8 @@ class Mysql extends Dbconfig
     }
 
 
-    //Method to Check Out Guests using the location id and user id
+
+    //Method to Check Out Guests
     function checkoutGuest($org_id, $loc_id, $usr_id, $op_date, $checkout)
     {
 
@@ -188,8 +189,12 @@ class Mysql extends Dbconfig
 
         //Get the row id from the guest_status table
         $this->sqlQuery = "SELECT gs_id FROM guest_status WHERE org_id = $org_id AND loc_id = $loc_id AND usr_id = $usr_id AND gs_op_date = '$op_date' AND gs_checkout IS NULL;";
-        if ($this->conn->query($this->sqlQuery) === TRUE) {
-            $gs_id = $this->conn->query($this->sqlQuery);
+
+        $result = $this->conn->query($this->sqlQuery);
+        
+        //We should get 1 row back from our select statement. Return error if otherwise
+        if ($result->num_rows === 1) {
+            $gs_id = $result->fetch_assoc()['gs_id'];
         } else {
             //disconnect from the DB
             self::disconnect();
@@ -212,7 +217,9 @@ class Mysql extends Dbconfig
     }
 
     
-    //Method to Check Out Guests using the location id and user id
+
+    //THIS IS NOT COMPLETE
+    //Method to Check Out Multiple Guests using their user ids
     function checkoutGuests($org_id, $loc_id, $usr_ids, $op_date, $checkout)
     {
         //Database connection
@@ -235,7 +242,7 @@ class Mysql extends Dbconfig
 
 
 
-    //Method to retrive get the guests status for a location
+    //Method to retrive the guests status for a location
     function getGuestStatus($id, $date)
     {
         //create array of guest objects
@@ -293,12 +300,13 @@ class Mysql extends Dbconfig
     {
         //Database connection
         $this->connect();
-        $this->sqlQuery = "SELECT loc_id, loc_name, loc_address_street, loc_address_street_2, loc_address_city, loc_address_state, loc_serves, loc_capacity, loc_status FROM location WHERE loc_id = $id;";
+        $this->sqlQuery = "SELECT loc_id, loc_name, loc_address_street, loc_address_street_2, loc_address_city, loc_address_state, loc_serves, loc_capacity, loc_status, loc_op_date FROM location WHERE loc_id = $id;";
         $result = $this->conn->query($this->sqlQuery);
 
         //add each row into a new Customer object
         $row = $result->fetch_assoc();
         $location =  new Location($row['loc_id'], $row['loc_name'], $row['loc_address_street'], $row['loc_address_street_2'], $row['loc_address_city'], $row['loc_address_state'], NULL,  NULL,  $row['loc_serves'],  $row['loc_capacity'], $row['loc_status']);
+        $location->setOpDate($row['loc_op_date']);
 
         //disconnect from the DB
         self::disconnect();
@@ -353,19 +361,20 @@ class Mysql extends Dbconfig
 
 
     //todo need to figure out a better way to do this in sql
-    function getLocationFull($id, $date)
+    function getLocationFull($id)
     {
     
         //Database connection
         $this->connect();
 
-        $this->sqlQuery = "SELECT loc_id, loc_name, loc_address_street, loc_address_street_2, loc_address_city, loc_address_state, loc_serves, loc_capacity, loc_status, loc_capacity-(SELECT count(usr_id) FROM guest_status WHERE loc_id = $id AND gs_op_date = '$date' AND gs_checkout IS NULL) AS loc_availability FROM location WHERE loc_id = $id";
+        $this->sqlQuery = "SELECT loc_id, loc_name, loc_address_street, loc_address_street_2, loc_address_city, loc_address_state, loc_serves, loc_capacity, loc_status, loc_op_date, loc_capacity-(SELECT count(usr_id) FROM guest_status WHERE loc_id = $id AND gs_op_date = loc_op_date AND gs_checkout IS NULL) AS loc_availability FROM location WHERE loc_id = $id";
         $result = $this->conn->query($this->sqlQuery);
 
         //add each row into a new guest object in the array
         while ($row = $result->fetch_assoc()) {
             $location = new Location($row['loc_id'], $row['loc_name'], $row['loc_address_street'], $row['loc_address_street_2'], $row['loc_address_city'], $row['loc_address_state'], NULL,  NULL,  $row['loc_serves'],  $row['loc_capacity'], $row['loc_status']);
             $location->setAvailability($row['loc_availability']);
+            $location->setOpDate($row['loc_op_date']);
         }
 
         //disconnect from the DB
@@ -373,6 +382,51 @@ class Mysql extends Dbconfig
 
         //return the array of Guest objects
         return $location;
+    }
+
+
+
+    //Method to Check Out Guests
+    function openLocation($org_id, $loc_id, $op_date)
+    {
+
+        //Database connection
+        $this->connect();
+
+        //Update the location table
+        $this->sqlQuery = "UPDATE location SET loc_status = 1, loc_op_date = '$op_date' WHERE org_id = $org_id AND loc_id = $loc_id;";
+        if ($this->conn->query($this->sqlQuery) === TRUE) {
+            //disconnect from the DB
+            self::disconnect();
+            return "Success";
+        } else {
+            //disconnect from the DB
+            self::disconnect();
+            return "Error: " . $this->sqlQuery . "<br>" . $this->conn->error;
+        }
+
+    }
+
+
+    //Method to Check Out Guests
+    function closeLocation($org_id, $loc_id)
+    {
+
+        //Database connection
+        $this->connect();
+
+        //Update the location table
+        $this->sqlQuery = "UPDATE location SET loc_status = 0, loc_op_date = NULL WHERE org_id = $org_id AND loc_id = $loc_id;";
+        if ($this->conn->query($this->sqlQuery) === TRUE) {
+            //disconnect from the DB
+            self::disconnect();
+            return "Success";
+        } else {
+            //disconnect from the DB
+            self::disconnect();
+            return "Error: " . $this->sqlQuery . "<br>" . $this->conn->error;
+        }
+
     }
 
 

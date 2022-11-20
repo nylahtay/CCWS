@@ -28,15 +28,16 @@ $conn = new mysql;
 //generate the current date to be the check in date
 //YY-MM-DD HH-MM-SS
 //todo - change date and time to use location's settings for timezone
+date_default_timezone_set("America/Chicago");
 $checkout = date("Y-m-d H:i:s");
 
 
-//check to see if all data is set
-$data = array($org_id, $loc_id, $usr_id, $op_date, $checkin);
-if (!in_array(NULL, $data)){
+//check to see if all data is set - javascript passes the empty values as 'undefined'
+$data = array($org_id, $loc_id, $usr_id, $op_date, $checkout);
+if (!in_array('undefined', $data) && !in_array(NULL, $data)){
     
     //connect to the data base to run the checkinGuest function.
-    $result = $conn->checkinGuest($org_id, $loc_id, $usr_id, $op_date, $checkin);
+    $result = $conn->checkoutGuest($org_id, $loc_id, $usr_id, $op_date, $checkout);
 
 }
 else {

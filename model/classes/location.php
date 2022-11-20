@@ -45,6 +45,9 @@ class Location
     // Property for location Status Type: BOOLEAN
     private $status;
 
+    // Property for location operating date Type: DATE  (YYYY-MM-DD)
+    private $op_date;
+
     // Property for location Status Type: INT
     private $cur_occupancy;
 
@@ -97,10 +100,22 @@ class Location
         return $this->capacity;
     }
 
+    //Function gets the status as a bool (true/false)
+    function getStatus()
+    {
+        return ($this->status == 0) ?  false :  true;
+    }
+
     //Function gets the status as a string of "Closed/Open"
     function getStatusString()
     {
         return ($this->status == 0) ?  "Closed" :  "Open";
+    }
+
+    //Function gets the operating date
+    function getOpDate()
+    {
+        return $this->op_date;
     }
 
     function getCurrOccupancy()
@@ -134,6 +149,12 @@ class Location
     function setAvailability($avail)
     {
         $this->availability = $avail;
+    }
+
+    //Expects a string for date.
+    function setOpDate($date)
+    {
+        $this->op_date = $date;
     }
 
 

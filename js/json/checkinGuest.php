@@ -28,30 +28,54 @@ $conn = new mysql;
 //generate the current date to be the check in date
 //YY-MM-DD HH-MM-SS
 //todo - change date and time to use location's settings for timezone
+date_default_timezone_set("America/Chicago");
 $checkin = date("Y-m-d H:i:s");
 
 
-//todo- Check if user is already checked in
 
+//Check if User is already checked in
+//Load checked in guests for this location
+$guestStatus = $conn->getGuestStatus($loc_id,$op_date);
+//Put each id into an array.
+$checked_usr_ids = array();
+foreach($guestStatus as $guest)
+{       
+    $checked_usr_ids[] = $guest[3];
+}
 
-//check to see if all data is set - javascript passes the empty values as 'undefined'
-$data = array($org_id, $loc_id, $usr_id, $op_date, $checkin);
-if (!in_array('undefined', $data) && !in_array(NULL, $data)){
-    
-    //connect to the data base to run the checkinGuest function.
-    $result = $conn->checkinGuest($org_id, $loc_id, $usr_id, $op_date, $checkin);
+var_dump($checked_usr_ids);
 
+//Scan the array for our $usr_id that we are trying to check in.
+$key = array_search( $usr_id, $checked_usr_ids ); // returns FALSE
+if ( FALSE !== $key ) {
+    // usr_id was found, key is in $index, return an error
+    $result = 'Error! User Is Already Checked In';
 }
 else {
-    $result = "Not all parameters passed";
+
+    //check to see if all data is set - javascript passes the empty values as 'undefined'
+    $data = array($org_id, $loc_id, $usr_id, $op_date, $checkin);
+    if (in_array('undefined', $data) || in_array(NULL, $data)){
+        //a NULL or undefined value was in there, return an error
+        $result = "Not all parameters passed";
+    }
+    else {
+        //SUCCESS!!!
+        //connect to the data base to run the checkinGuest function.
+        $result = $conn->checkinGuest($org_id, $loc_id, $usr_id, $op_date, $checkin);
+    }
 }
 
 
-//result is true or false
-echo json_encode($result);
 
 
 
-//TESTING STUFF
-// $data = array($org_id, $loc_id, $usr_id, $op_date, $checkin);
-// echo json_encode($data);
+
+// //result is true or false
+ echo json_encode($result);
+
+
+
+// //TESTING STUFF
+// // $data = array($org_id, $loc_id, $usr_id, $op_date, $checkin);
+// // echo json_encode($data);

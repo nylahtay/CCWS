@@ -1,18 +1,18 @@
 <?php
 $conn = new Mysql();
 
-//todo - get the orginization date from the url
+//todo - get the orginization id from the url
 $org_id = 1;
 
 //get the location id ('loc=') from the url
 $loc_id = filter_input(INPUT_GET, 'loc');
+
 //if id is not null, then load the location up
+if (!is_null($loc_id))  $location = $conn->getLocationFull($loc_id) ;
 
 //set the operating date
-$op_date = '2022-11-15';
+echo $op_date = $location->getOpDate();
 
-if (!is_null($loc_id))  $location = $conn->getLocationFull($loc_id,$op_date) ;
-var_dump($location);
 $guests = $conn->getGuests();
 ?>
 
@@ -20,7 +20,8 @@ $guests = $conn->getGuests();
     <h1 class="h2"><?php echo $location->getName(); ?><span class="status <?php echo $location->getStatusString(); ?>"><?php echo $location->getStatusString(); ?><span></h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
+          <button type="button" class="btn btn-sm btn-outline-secondary" onclick="<?php echo ($location->getStatus()) ? 'closeLocation()' : 'openLocation()' ; ?>"><?php echo ($location->getStatus()) ? 'Close Location' : 'Open Location' ; ?></button>
+            <button type="button" class="btn btn-sm btn-outline-secondary">Settings</button>
             <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
         </div>
         <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
@@ -43,7 +44,7 @@ $guests = $conn->getGuests();
       <tbody>
         <tr>
           <th scope="row">Checked in Staff/Volunteers</th>
-          <td><a href="#">4</a></td>
+          <td><a href="#">0</a></td>
         </tr>
         <tr>
           <th scope="row">Checked in Guests</th>
@@ -92,7 +93,7 @@ $guests = $conn->getGuests();
             <option value="<?php echo $name = $guest->getFirstName() . ' ' . $guest->getLastName(); ?>" name="<?php echo $name; ?>" data-id="<?php echo $guest->getId();?>">Birthdate: <?php echo $guest->getBirthdate();?></option>
             <?php endforeach; ?>
         </datalist>
-        <div class="input-group-text"><button class="btn " type="submit">Check-In</button></div>
+        <div class="input-group-text"><button class="btn " type="submit" <?php echo ($location->getStatus()) ? '' : 'disabled' ?>>Check-In</button></div>
     </div>    
 </form>
 
@@ -101,25 +102,7 @@ $guests = $conn->getGuests();
 
 
 
-<script> 
-//postAjax from https://plainjs.com/javascript/ajax/send-ajax-get-and-post-requests-47/
-function postAjax(url, data, success) {
-    var params = typeof data == 'string' ? data : Object.keys(data).map(
-            function(k){ return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]) }
-        ).join('&');
-
-    var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
-    xhr.open('POST', url);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState>3 && xhr.status==200) { success(xhr.responseText); }
-    };
-    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.send(params);
-    return xhr;
-}
-
-</script>
+<script src="../js/json/postAjax.js"></script>
 
 
 <script>
@@ -154,7 +137,7 @@ function postAjax(url, data, success) {
 
     //create the guest info array
     //org_id, loc_id, user_id, operating_date 
-    guestInfo = ['<?php echo $org_id; ?>', '<?php echo $loc_id; ?>', selectedId,'<?php echo $op_date;?>']
+    guestInfo = ['<?php echo $org_id; ?>', '<?php echo $loc_id; ?>', selectedId,'<?php echo $op_date;?>'];
 
     //ajax call for user checkin.
     let jsonPath = "../js/json/checkinGuest.php";
@@ -167,7 +150,74 @@ function postAjax(url, data, success) {
       'loc_id': '<?php echo $loc_id; ?>', 
       'usr_id': selectedId, 
       'op_date': '<?php echo $op_date; ?>' 
-    }, function(data){ alert(data) });
+    }, function(data){ ajaxResponse(data); });
 
+
+    //funtion to handle the response back from the postAjax
+    function ajaxResponse(data)
+    {
+      //for now, alert
+      alert(data);
+
+      //todo: update the checked in Guests, and Available beds on the page.
+      //for now we can simply reload
+      location.reload();
+    }
   }
+
+
+
+  function openLocation()
+  {
+    <?php
+      //generate the current date to be the check in date
+      //YY-MM-DD HH-MM-SS
+      //todo - change date and time to use location's settings for timezone
+      date_default_timezone_set("America/Chicago");
+      $new_op_date = date("Y-m-d");
+    ?>
+
+    //set the op_date to be the new generated op_date
+    op_date = '<?php echo $new_op_date ?>';
+    alert('opening location: date ' + op_date);
+    //ajax call for user checkin.
+    let jsonPath = "../js/json/location-open.php";
+
+    //call the Ajax to get the results
+    //example postAjax('http://foo.bar/', { p1: 1, p2: 'Hello World' }, function(data){ someFunction(data); });
+    postAjax(jsonPath, { 
+      'api_key': 'todo- create api key',
+      'org_id': '<?php echo $org_id; ?>', 
+      'loc_id': '<?php echo $loc_id; ?>', 
+      'op_date': op_date 
+    }, function(data){ openLocationResult(data); });
+  }
+
+  function openLocationResult(data){
+    alert(data);
+    location.reload();
+  }
+
+
+
+  function closeLocation()
+  {
+    alert('closing location');
+    //ajax call for user checkin.
+    let jsonPath = "../js/json/location-close.php";
+
+    //call the Ajax to get the results
+    //example postAjax('http://foo.bar/', { p1: 1, p2: 'Hello World' }, function(data){ someFunction(data); });
+    postAjax(jsonPath, { 
+      'api_key': 'todo- create api key',
+      'org_id': '<?php echo $org_id; ?>', 
+      'loc_id': '<?php echo $loc_id; ?>', 
+    }, function(data){ closeLocationResult(data); });
+  }
+
+  function closeLocationResult(data){
+    alert(data);
+    location.reload();
+  }
+
 </script>

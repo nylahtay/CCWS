@@ -41,7 +41,7 @@ $guests = $conn->getGuests();
       <tbody>
         <tr>
           <th scope="row">Checked in Staff/Volunteers</th>
-          <td><a href="#">4</a></td>
+          <td><a href="#">0</a></td>
         </tr>
         <tr>
           <th scope="row">Checked in Guests</th>

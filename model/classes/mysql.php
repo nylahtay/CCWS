@@ -155,6 +155,85 @@ class Mysql extends Dbconfig
 
 
 
+    //Method to Check in Guests using the location id and user id
+    function checkinGuest($org_id,$loc_id, $usr_id, $op_date, $checkin)
+    {
+        //create array of guest objects
+        $result = array();
+
+        //Database connection
+        $this->connect();
+
+        //create the customer record in the customer table using the $id that is returned
+        $this->sqlQuery = "INSERT INTO guest_status (gs_id, gs_op_date, org_id, loc_id, usr_id, gs_checkin, gs_checkout) VALUES (NULL, '$op_date', '$org_id', '$loc_id', '$usr_id', '$checkin', NULL);";
+
+        if ($this->conn->query($this->sqlQuery) === TRUE) {
+            //disconnect from the DB
+            self::disconnect();
+            return "Success - User id $usr_id has been checked in";
+        } else {
+            //disconnect from the DB
+            self::disconnect();
+            return "Error: " . $this->sqlQuery . "<br>" . $this->conn->error;
+        }
+    }
+
+
+    //Method to Check Out Guests using the location id and user id
+    function checkoutGuest($org_id, $loc_id, $usr_id, $op_date, $checkout)
+    {
+
+        //Database connection
+        $this->connect();
+
+        //Get the row id from the guest_status table
+        $this->sqlQuery = "SELECT gs_id FROM guest_status WHERE org_id = $org_id AND loc_id = $loc_id AND usr_id = $usr_id AND gs_op_date = '$op_date' AND gs_checkout IS NULL;";
+        if ($this->conn->query($this->sqlQuery) === TRUE) {
+            $gs_id = $this->conn->query($this->sqlQuery);
+        } else {
+            //disconnect from the DB
+            self::disconnect();
+            //return Error
+            return "Error: " . $this->sqlQuery . "<br>" . $this->conn->error;
+        }
+
+        //Update the guest_status table with the checkout date
+        $this->sqlQuery = "UPDATE guest_status SET gs_checkout = '$checkout' WHERE gs_id = $gs_id;";
+        if ($this->conn->query($this->sqlQuery) === TRUE) {
+            //disconnect from the DB
+            self::disconnect();
+            return "Success";
+        } else {
+            //disconnect from the DB
+            self::disconnect();
+            return "Error: " . $this->sqlQuery . "<br>" . $this->conn->error;
+        }
+
+    }
+
+    
+    //Method to Check Out Guests using the location id and user id
+    function checkoutGuests($org_id, $loc_id, $usr_ids, $op_date, $checkout)
+    {
+        //Database connection
+        $this->connect();
+        $this->sqlQuery = "SELECT u.usr_fname, u.usr_lname, gs.gs_checkin, gs.gs_checkout, gs.usr_id FROM guest_status as gs JOIN users as u ON u.usr_id = gs.usr_id";
+        $result = $this->conn->query($this->sqlQuery);
+        
+        //disconnect from the DB
+        self::disconnect();
+
+        //if $usr_ids has one or more id in it
+        if(!in_array(NULL, $usr_ids)) { 
+            //loop through each user id and check them out using the checkoutGuest() function
+            foreach ($usr_ids as $usr_id)
+            {
+                self::checkoutGuest($org_id, $loc_id, $usr_id, $op_date, $checkout);
+            }
+        }
+    }
+
+
 
     //Method to retrive get the guests status for a location
     function getGuestStatus($id, $date)

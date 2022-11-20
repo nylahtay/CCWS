@@ -68,6 +68,9 @@ switch ($action) {
     case 'newguest':
         getLayout('main', 'newguest.php', NULL , ['title'=> 'Admin Dashboard'], ['css'=>'../css/admin.css']); 
     break;
+    case 'editguest':
+        getLayout('main', 'newguest.php', NULL , ['title'=> 'Admin Dashboard'], ['css'=>'../css/admin.css']); 
+    break;
     case 'status':
         getLayout('main', 'status.php', NULL , ['title'=> 'Admin Dashboard'], ['css'=>'../css/admin.css']); 
     break;

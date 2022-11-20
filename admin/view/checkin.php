@@ -19,7 +19,7 @@
             <option value="Berry Johnson">
             <option value="Wilma Lewis">
         </datalist>
-        <div class="input-group-text"><a class="btn ">Check-In</a></div>
+        <div class="input-group-text"><a class="btn " type="submit">Check-In</a></div>
     </div>    
     
 </form>

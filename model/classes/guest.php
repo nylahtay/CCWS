@@ -17,6 +17,9 @@ class Guest extends User
     //Property for Guest ID Type: Int
     private $guestId;
 
+    //Property for Guest Family Group Type: boolean 
+    private $birthdate;
+
     //Property for Guest Pet Type: boolean 
     private $pet_status;
 
@@ -59,6 +62,11 @@ class Guest extends User
         return $this->guestId;
     }
 
+    function getBirthdate()
+    {
+        return $this->birthdate;
+    }
+
     
 
 
@@ -84,6 +92,12 @@ class Guest extends User
     function setFamilyGroupStatus($status)
     {
         $this->family_group = $status;
+    }
+
+    //Expects an BOOL for family group status
+    function setBirthdate($birthdate)
+    {
+        $this->birthdate = $birthdate;
     }
 
     

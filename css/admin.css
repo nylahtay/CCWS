@@ -1,7 +1,7 @@
-body {
+/*body {
     font-size: .875rem;
   }
-  
+  */
   .feather {
     width: 16px;
     height: 16px;
@@ -232,3 +232,15 @@ body {
  .status.Closed {
     background: #ffb0b0;
  }
+
+
+
+ .btn-toolbar .toolbar-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.toolbar-text p {
+  margin: auto;
+}

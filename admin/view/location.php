@@ -11,16 +11,19 @@ $loc_id = filter_input(INPUT_GET, 'loc');
 if (!is_null($loc_id))  $location = $conn->getLocationFull($loc_id) ;
 
 //set the operating date
-echo $op_date = $location->getOpDate();
+$op_date = $location->getOpDate();
 
 $guests = $conn->getGuests();
 ?>
 
+<div id="top"></div>
+
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2"><?php echo $location->getName(); ?><span class="status <?php echo $location->getStatusString(); ?>"><?php echo $location->getStatusString(); ?><span></h1>
     <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="toolbar-text me-2"><?php echo (isset($op_date)) ? '<p>Operating Date: ' . date("m/d/Y", strtotime($op_date)) : ''; ?></p></div>
         <div class="btn-group me-2">
-          <button type="button" class="btn btn-sm btn-outline-secondary" onclick="<?php echo ($location->getStatus()) ? 'closeLocation()' : 'openLocation()' ; ?>"><?php echo ($location->getStatus()) ? 'Close Location' : 'Open Location' ; ?></button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="<?php echo ($location->getStatus()) ? 'closeLocation()' : 'openLocation()' ; ?>"><?php echo ($location->getStatus()) ? 'Close Location' : 'Open Location' ; ?></button>
             <button type="button" class="btn btn-sm btn-outline-secondary">Settings</button>
             <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
         </div>
@@ -34,13 +37,7 @@ $guests = $conn->getGuests();
 
 <div class="row">
   <div class="col-sm-6">
-    <table class="table">
-      <!-- <thead>
-        <tr>
-          <th scope="col"></th>
-          <th scope="col">First</th>
-        </tr>
-      </thead> -->
+    <!-- <table class="table">
       <tbody>
         <tr>
           <th scope="row">Checked in Staff/Volunteers</th>
@@ -55,7 +52,21 @@ $guests = $conn->getGuests();
           <td><a href="#"><?php echo $location->getAvailability(); ?></a></td>
         </tr>
       </tbody>
-    </table>
+    </table> -->
+    <div class="list-group">
+      <a href="#" class="text-decoration-none list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+        Checked in Staff/Volunteers
+        <span class="badge rounded-pill text-bg-secondary">0</span>
+      </a>
+      <a href="?action=status&loc=<?php echo $loc_id; ?>" class="text-decoration-none list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+        Checked in Guests
+        <span class="badge rounded-pill text-bg-secondary"><?php echo $location->getCapacity()-$location->getAvailability(); ?></span>
+      </a>
+      <a href="?action=status&loc=<?php echo $id; ?>" class="text-decoration-none list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+        Available Beds
+        <span class="badge rounded-pill text-bg-primary"><?php echo $location->getAvailability(); ?></span>
+      </a>
+    </div>
   </div>
   <div class="col-sm-6 px-3">
     <h3>Staff/Volunteer Check-In</h3>
@@ -169,6 +180,8 @@ $guests = $conn->getGuests();
 
   function openLocation()
   {
+    //create modal for date question.
+
     <?php
       //generate the current date to be the check in date
       //YY-MM-DD HH-MM-SS
@@ -176,6 +189,8 @@ $guests = $conn->getGuests();
       date_default_timezone_set("America/Chicago");
       $new_op_date = date("Y-m-d");
     ?>
+
+
 
     //set the op_date to be the new generated op_date
     op_date = '<?php echo $new_op_date ?>';
@@ -202,22 +217,45 @@ $guests = $conn->getGuests();
 
   function closeLocation()
   {
-    alert('closing location');
-    //ajax call for user checkin.
-    let jsonPath = "../js/json/location-close.php";
 
-    //call the Ajax to get the results
-    //example postAjax('http://foo.bar/', { p1: 1, p2: 'Hello World' }, function(data){ someFunction(data); });
-    postAjax(jsonPath, { 
-      'api_key': 'todo- create api key',
-      'org_id': '<?php echo $org_id; ?>', 
-      'loc_id': '<?php echo $loc_id; ?>', 
-    }, function(data){ closeLocationResult(data); });
+    //todo - replace confirm with https://getbootstrap.com/docs/5.2/components/modal/#static-backdrop
+
+    //confirm that they want to take the option
+    var response = confirm("Are you sure you want to continue?\nThis will check out any remaining guests.");
+    if (response == true) {
+      alert('closing location');
+      //ajax call for user checkin.
+      let jsonPath = "../js/json/location-close.php";
+
+      //call the Ajax to get the results
+      //example postAjax('http://foo.bar/', { p1: 1, p2: 'Hello World' }, function(data){ someFunction(data); });
+      postAjax(jsonPath, { 
+        'api_key': 'todo- create api key',
+        'org_id': '<?php echo $org_id; ?>', 
+        'loc_id': '<?php echo $loc_id; ?>', 
+      }, function(data){ closeLocationResult(data); });
+    }
+    
   }
 
   function closeLocationResult(data){
     alert(data);
     location.reload();
+  }
+
+  
+  //this function will create an alert.
+  //message is the message of the alert
+  //elementId is the location where the alert will be put into
+  //type is the type of alert
+  function createAlert(message, elementId, type)
+  {
+    let classType = "alert-" + type;
+    let div = document.createElement("div");
+    div.innerHTML = message;
+    div.classList.add("alert",classType);
+    let id = document.getElementById(elementId);
+    id.prepend(div);
   }
 
 </script>

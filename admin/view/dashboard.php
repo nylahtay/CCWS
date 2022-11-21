@@ -36,23 +36,21 @@ $guests = $conn->getGuests();
   ?>  
 
   <div class="col-sm-6 p-3">
-    <h1 class="h4"><?php echo $name; ?> <span class="status <?php echo $status; ?>"><?php echo $status; ?></span></h1>
-    <table class="table">
-      <tbody>
-        <tr>
-          <th scope="row">Checked in Staff/Volunteers</th>
-          <td><a href="#">0</a></td>
-        </tr>
-        <tr>
-          <th scope="row">Checked in Guests</th>
-          <td><a href="?action=status&loc=<?php echo $id; ?>"><?php echo $occupancy; ?></a></td>
-        </tr>
-        <tr>
-          <th scope="row">Available Beds</th>
-          <td><a href="#"><?php echo $avail; ?></a></td>
-        </tr>
-      </tbody>
-    </table>
+    <h1 class="h4"><a class="text-decoration-none" href="?action=location&loc=<?php echo $id; ?>"><?php echo $name; ?></a> <span class="status <?php echo $status; ?>"><?php echo $status; ?></span></h1>
+    <div class="list-group">
+      <a href="#" class="text-decoration-none list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+        Checked in Staff/Volunteers
+        <span class="badge rounded-pill text-bg-secondary">0</span>
+      </a>
+      <a href="?action=status&loc=<?php echo $id; ?>" class="text-decoration-none list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+        Checked in Guests
+        <span class="badge rounded-pill text-bg-secondary"><?php echo $occupancy; ?></span>
+      </a>
+      <a href="?action=status&loc=<?php echo $id; ?>" class="text-decoration-none list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+        Available Beds
+        <span class="badge rounded-pill text-bg-secondary"><?php echo $avail; ?></span>
+      </a>
+    </div>
   </div>
 
   <?php endforeach; ?>

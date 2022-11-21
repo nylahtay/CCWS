@@ -5,7 +5,6 @@ $conn = new Mysql();
 $id = filter_input(INPUT_GET, 'loc');
 //if id is not null, then load the location up
 if (!is_null($id))  $location = $conn->getLocationById($id) ;
-var_dump($location);
 $guests = $conn->getGuests();
 ?>
 
@@ -17,7 +16,7 @@ $guests = $conn->getGuests();
       </div>
 
 
-<h1>New Guest</h1>
+<h1>Create New Guest</h1>
 
 <form action="?" method="post" class="row g-3 needs-validation" novalidate>
   <div class="col-md-6">

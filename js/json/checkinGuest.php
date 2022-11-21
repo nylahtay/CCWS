@@ -43,13 +43,11 @@ foreach($guestStatus as $guest)
     $checked_usr_ids[] = $guest[3];
 }
 
-var_dump($checked_usr_ids);
-
 //Scan the array for our $usr_id that we are trying to check in.
 $key = array_search( $usr_id, $checked_usr_ids ); // returns FALSE
 if ( FALSE !== $key ) {
     // usr_id was found, key is in $index, return an error
-    $result = 'Error! User Is Already Checked In';
+    $result = 'Error! User Is Already Checked Into This Location';
 }
 else {
 

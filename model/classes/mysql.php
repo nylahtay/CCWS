@@ -125,6 +125,37 @@ class Mysql extends Dbconfig
     }
 
 
+
+    //Method to create a guest
+    //This method creates a guest.
+    function updateGuest($org_id, $usr_id, $usr_fname = null, $usr_lname = null, $usr_notes = null, $guest_birthdate = null)
+    {
+
+        //Database connection
+        $this->connect();
+        $this->sqlQuery = "UPDATE users SET usr_fname = '$usr_fname', usr_lname = '$usr_lname', usr_notes = '$usr_notes' WHERE usr_id = '$usr_id'";
+
+
+        //Update the user record
+        if ($this->conn->query($this->sqlQuery) === TRUE) {
+
+            //Update the the customer record
+            $this->sqlQuery = "UPDATE guests SET guest_birthdate = '$guest_birthdate', guest_modified_by = NULL WHERE usr_id = '$usr_id'";
+
+            if ($this->conn->query($this->sqlQuery) === TRUE) {
+                return "Success";
+            } else {
+                return "Error: " . $this->sqlQuery . "<br>" . $this->conn->error;
+            }
+        } else {
+            return "Error: " . $this->sqlQuery . "<br>" . $this->conn->error;
+        }
+
+        //disconnect from the DB
+        self::disconnect();
+    }
+
+
     //Method to retrive all the guests in the DB
     //This method returns an array of all the guests as Guest objects.
     function getGuests()

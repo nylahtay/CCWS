@@ -19,6 +19,8 @@ if ($action === NULL) {
 }
 
 
+
+
 //If $_POST, get the postAction
 $postAction = filter_input(INPUT_POST, 'postAction');
 switch ($postAction) {
@@ -34,7 +36,7 @@ switch ($postAction) {
         $usr_notes = isset($guest['Notes']) ? htmlspecialchars($guest['Notes'], ENT_QUOTES) : NULL;
 
         //create the guest
-        $message = $conn->createGuest(1, NULL, NULL, 3, NULL, NULL, $usr_fname, $usr_lname, NULL, $usr_notes, $guest_birthdate, $guest_pet, $guest_family_group);
+        $message = $conn->createGuest($org_id, NULL, NULL, 3, NULL, NULL, $usr_fname, $usr_lname, NULL, $usr_notes, $guest_birthdate, $guest_pet, $guest_family_group);
         if ($message === "Success") {
             //echo '<div class="alert alert-success" role="alert">Customer Created</div>';
         } else {
@@ -42,6 +44,23 @@ switch ($postAction) {
         }
     break;
     case 'updateGuest':
+        //Check to see if there is data
+        $guest = (isset($_POST['guest'])) ? $_POST['guest'] :  NULL;
+        
+        $usr_id = isset($guest['Id']) ? htmlspecialchars($guest['Id'], ENT_QUOTES) : NULL;
+        $usr_fname = isset($guest['FirstName']) ? htmlspecialchars($guest['FirstName'], ENT_QUOTES) : NULL;
+        $usr_lname = isset($guest['LastName']) ? htmlspecialchars($guest['LastName'], ENT_QUOTES) : NULL;
+        $guest_birthdate = isset($guest['Birthdate']) ? htmlspecialchars($guest['Birthdate'], ENT_QUOTES) : NULL;
+        $guest_pet = isset($guest['Pet']) ? htmlspecialchars($guest['Pet'], ENT_QUOTES) : false;
+        $guest_family_group = isset($guest['Family']) ? htmlspecialchars($guest['Family'], ENT_QUOTES) : false;
+        $usr_notes = isset($guest['Notes']) ? htmlspecialchars($guest['Notes'], ENT_QUOTES) : NULL;
+        //create the guest
+        $message = $conn->updateGuest($org_id, $usr_id, $usr_fname, $usr_lname, $usr_notes, $guest_birthdate);
+        if ($message === "Success") {
+            //echo '<div class="alert alert-success" role="alert">Customer Created</div>';
+        } else {
+            echo '<div class="alert alert-danger" role="alert"><strong>Error Creating Customer!</strong><br><small>' . $message . '</small></div>';
+        }
     break;
 }
 

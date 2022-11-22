@@ -13,16 +13,16 @@ var_dump($guest);
 ?>
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2"><?php echo $location->getName(); ?></h1>
+        <h1 class="h2">Guests</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
          
         </div>
       </div>
 
 
-<h1>Edit Guest</h1>
+<h3>Edit Guest</h3>
 
-<form action="?" method="post" class="row g-3 needs-validation" novalidate>
+<form action="?action=guests" method="post" class="row g-3 needs-validation" novalidate>
   <div class="col-md-6">
     <label for="guestFirstName" class="form-label">First</label>
     <input type="text" class="form-control" name="guest[FirstName]" id="guestFirstName" <?php echo ($fname = $guest->getFirstName()) ? 'value="' . $fname . '"' : 'placeholder="First Name"' ?> required>
@@ -49,12 +49,15 @@ var_dump($guest);
         </label>
     </div>
   </div> -->
-  
   <div class="col-12">
-    <button type="submit" class="btn btn-primary">Update Guest</button>
+    <label for="guestNotes" class="form-label">Notes</label>
+    <textarea class="form-control" name="guest[Notes]" placeholder="Guest notes" id="guestNotes"><?= $guest->getNotes(); ?></textarea>
   </div>
-  <input type="hidden" name="guestId" value="<?/*= $guest->getId() ;*/?>">
-  <input type="hidden" name="postAction" value="update">
+  <div class="col-12">
+    <button type="submit" class="btn btn-primary">Save</button>
+  </div>
+  <input type="hidden" name="guest[Id]" value="<?= $guest->getId() ;?>">
+  <input type="hidden" name="postAction" value="updateGuest">
 </form>
 
 

@@ -18,7 +18,7 @@ $guests = $conn->getGuests();
     <h1 class="h2">Guests</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary">New Guest</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="window.location.href='?action=newguest&loc=<?php echo $location->getId(); ?>'">New Guest</button>
             <button type="button" class="btn btn-sm btn-outline-secondary">Settings</button>
             <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
         </div>

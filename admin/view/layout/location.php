@@ -67,7 +67,7 @@ $org_id = 1;
             
             ?>
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2"><?php echo $location->getName(); ?></h1>
+                    <h1 class="h2"><a class="text-decoration-none" href="?action=location&loc=<?php echo $loc_id; ?>"><?php echo $location->getName(); ?></a></h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
                         <div class="toolbar-text me-2"><?php echo (isset($op_date)) ? '<p>Operating Date: ' . date("m/d/Y", strtotime($op_date)) : ''; ?></p></div>
                         
@@ -83,7 +83,7 @@ $org_id = 1;
                             </ul>
                         </div>
                         <button type="button" class="btn btn-sm btn-outline-secondary" onclick="window.location.href='?action=location_settings&loc=<?php echo $location->getId(); ?>'">Settings</button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="window.location.href='?action=location_new&loc=<?php echo $location->getId(); ?>'">Edit Location</button>
                         </div>
                         <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
                             <span data-feather="calendar" class="align-text-bottom"></span>

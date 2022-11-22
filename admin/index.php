@@ -8,6 +8,10 @@ include_once 'model/functions.php';
 include_once 'model/db.php';
 $conn = new Mysql();
 
+
+//todo - set org_id
+$org_id = 1;
+
 // Get the action to perform
 $action = filter_input(INPUT_POST, 'action');
 if ($action === NULL) {
@@ -86,8 +90,11 @@ switch ($action) {
     case 'status':
         getLayout('location', 'status.php', NULL , ['title'=> 'Admin - Guest Status'], ['css'=>'../css/admin.css']); 
     break;
+    case 'location_edit':
+        getLayout('location', 'location_edit.php', NULL , ['title'=> 'Admin - Guest Status'], ['css'=>'../css/admin.css']); 
+    break;
     case 'location_settings':
-        getLayout('location', 'settings.php', NULL , ['title'=> 'Admin - Guest Status'], ['css'=>'../css/admin.css']); 
+        getLayout('location', 'location_settings.php', NULL , ['title'=> 'Admin - Guest Status'], ['css'=>'../css/admin.css']); 
     break;
     case 'checkin':
         getLayout('main', 'checkin.php', NULL , ['title'=> 'Admin Dashboard'], ['css'=>'../css/admin.css']); 

@@ -9,7 +9,6 @@ if (!is_null($id))  $location = $conn->getLocationById($id) ;
 $guest_id = filter_input(INPUT_GET, 'guestId');
 
 $guest = $conn->getGuestById($guest_id);
-var_dump($guest);
 ?>
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -55,6 +54,8 @@ var_dump($guest);
   </div>
   <div class="col-12">
     <button type="submit" class="btn btn-primary">Save</button>
+    <button type="submit" class="btn btn-danger" disabled>Delete</button>
+    <a href="?action=guests"><button class="btn btn-outline-secondary">Cancel</button></a>
   </div>
   <input type="hidden" name="guest[Id]" value="<?= $guest->getId() ;?>">
   <input type="hidden" name="postAction" value="updateGuest">

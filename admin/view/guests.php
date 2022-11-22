@@ -32,9 +32,9 @@ $guests = $conn->getGuests();
 
 
 
-<form id="guestCheckIn" class="row g-2">
+<form id="guestSearch" class="row g-2">
     <div class="input-group">
-        <input id="guestlistInput" class="form-control col-auto" list="guestlistOptions" placeholder="Search Guests..." autocomplete="off">
+        <input id="guestlistInput" class="form-control col-auto" list="guestlistOptions" placeholder="Search Guests..." autocomplete="off" disabled>
         <datalist id="guestlistOptions">
             <?php foreach ($guests as $guest) : ?>
             <option value="<?php echo $name = $guest->getFirstName() . ' ' . $guest->getLastName(); ?>" name="<?php echo $name; ?>" data-id="<?php echo $guest->getId();?>">Birthdate: <?php echo $guest->getBirthdate();?></option>

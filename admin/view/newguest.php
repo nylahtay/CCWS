@@ -2,23 +2,24 @@
 $conn = new Mysql();
 
 //get the location id ('loc=') from the url
-$id = filter_input(INPUT_GET, 'loc');
+$loc_id = filter_input(INPUT_GET, 'loc');
+$action = filter_input(INPUT_GET, 'action');
 //if id is not null, then load the location up
-if (!is_null($id))  $location = $conn->getLocationById($id) ;
+if (!is_null($loc_id))  $location = $conn->getLocationById($loc_id) ;
 $guests = $conn->getGuests();
 ?>
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2"><?php echo $location->getName(); ?></h1>
+        <h1 class="h2"><?php echo ($loc_id > 0) ? $location->getName() : 'Guests'; ?></h1>
         <div class="btn-toolbar mb-2 mb-md-0">
          
         </div>
       </div>
 
 
-<h1>Create New Guest</h1>
+<h3>Create New Guest</h3>
 
-<form action="?" method="post" class="row g-3 needs-validation" novalidate>
+<form action="?action=<?php echo ($loc_id > 0) ? 'location&loc='.$loc_id : $action?>" method="post" class="row g-3 needs-validation" novalidate>
   <div class="col-md-6">
     <label for="guestFirstName" class="form-label">First</label>
     <input type="text" class="form-control" placeholder="First Name" name="guest[FirstName]" id="guestFirstName" autocomplete="off" required>
@@ -69,7 +70,7 @@ $guests = $conn->getGuests();
   </div>
   <div class="col-12">
     <button type="submit" class="btn btn-primary">Create Guest</button>
-    <button type="submit" class="btn btn-outline-primary">Create Guest & Check In</button>
+    <button type="submit" class="btn btn-outline-primary" disabled>Create Guest & Check In</button>
   </div>
   <input type="hidden" name="postAction" value="createGuest">
 </form>

@@ -1,6 +1,8 @@
 <?php
 $conn = new Mysql();
 $locations = $conn->getLocations();
+$loc_id = filter_input(INPUT_GET, 'loc');
+$action = filter_input(INPUT_GET, 'action');
 ?>
 
 
@@ -8,8 +10,8 @@ $locations = $conn->getLocations();
                 <div class="position-sticky pt-3 sidebar-sticky d-flex flex-column p-3">
                     <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link btn active d-inline-flex align-items-center rounded border-0" aria-current="page" href="?action=dashboard">
-                        <button class="btn active d-inline-flex align-items-center rounded border-0">
+                        <a class="nav-link btn <?php echo ($action == 'dashboard') ? 'active' : '' ?> d-inline-flex align-items-center rounded border-0" aria-current="page" href="?action=dashboard">
+                        <button class="btn <?php echo ($action == 'dashboard') ? 'active' : '' ?> d-inline-flex align-items-center rounded border-0">
                         <span data-feather="home" class="align-text-bottom"></span>
                         Dashboard
                         </button>
@@ -25,12 +27,18 @@ $locations = $conn->getLocations();
                                 $name = $location->getName();
                                 $id = $location->getId();
                             ?>
-                            <li><a href="?action=location&loc=<?php echo $id; ?>" class="link-dark d-inline-flex text-decoration-none rounded"><?php echo $name; ?></a></li>
+                            <li><a href="?action=location&loc=<?= $id; ?>" class="link-dark d-inline-flex text-decoration-none <?php echo ($loc_id === $id) ? 'active ' : '';?>rounded"><?= $name; ?></a></li>
                             <?php endforeach; ?>
                         </ul>
                         </div>
                     </li>
-                    <li class="mb-1">
+                    <li class="nav-item">
+                        <a class="nav-link" href="?action=guests">
+                        <span data-feather="file-text" class="align-text-bottom"></span>
+                        Guests
+                        </a>
+                    </li>
+                    <!-- <li class="mb-1">
                         <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0" data-bs-toggle="collapse" data-bs-target="#users-collapse" aria-expanded="false">
                         Users
                         </button>
@@ -39,7 +47,7 @@ $locations = $conn->getLocations();
                             <li><a href="?action=guests" class="link-dark d-inline-flex text-decoration-none rounded">Guests</a></li>
                         </ul>
                         </div>
-                    </li>
+                    </li> -->
                     
                     <li class="mb-1">
                         <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0" data-bs-toggle="collapse" data-bs-target="#reports-collapse" aria-expanded="false">

@@ -30,6 +30,16 @@ $locations = $conn->getLocations();
                         </ul>
                         </div>
                     </li>
+                    <li class="mb-1">
+                        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0" data-bs-toggle="collapse" data-bs-target="#users-collapse" aria-expanded="false">
+                        Users
+                        </button>
+                        <div class="collapse" id="users-collapse" style="">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="?action=guests" class="link-dark d-inline-flex text-decoration-none rounded">Guests</a></li>
+                        </ul>
+                        </div>
+                    </li>
                     
                     <li class="mb-1">
                         <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0" data-bs-toggle="collapse" data-bs-target="#reports-collapse" aria-expanded="false">

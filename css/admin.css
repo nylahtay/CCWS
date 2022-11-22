@@ -225,11 +225,11 @@ body {
     margin-left: 1rem;
 }
 
- .status.Open {
+ .status-Open {
    background: #d2f4ea;
  }
 
- .status.Closed {
+ .status-Closed {
     background: #ffb0b0;
  }
 

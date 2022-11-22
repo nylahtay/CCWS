@@ -19,8 +19,6 @@ if ($action === NULL) {
 }
 
 
-
-
 //If $_POST, get the postAction
 $postAction = filter_input(INPUT_POST, 'postAction');
 switch ($postAction) {
@@ -47,32 +45,30 @@ switch ($postAction) {
     break;
 }
 
-// var_dump( 
-//     filter_input(INPUT_POST, 'inputFirstName'),
-//  filter_input(INPUT_POST, 'inputLastName'),
-//  filter_input(INPUT_POST, 'inputAddress'),
-//  filter_input(INPUT_POST, 'inputPet'),
-//  filter_input(INPUT_POST, 'inputFamily'),
-// );
-
 
 
 
 switch ($action) {
     case 'location':
-        getLayout('main', 'location.php', NULL , ['title'=> 'Admin Dashboard'], ['css'=>'../css/admin.css']); 
+        getLayout('location', 'location.php', NULL , ['title'=> 'Admin - Location'], ['css'=>'../css/admin.css']); 
     break;
     case 'newreservation':
         getLayout('main', 'newreservation.php', NULL , ['title'=> 'Admin Dashboard'], ['css'=>'../css/admin.css']); 
     break;
     case 'newguest':
-        getLayout('main', 'newguest.php', NULL , ['title'=> 'Admin Dashboard'], ['css'=>'../css/admin.css']); 
+        getLayout('main', 'newguest.php', NULL , ['title'=> 'Admin - New Guest'], ['css'=>'../css/admin.css']); 
+    break;
+    case 'guests':
+        getLayout('main', 'guests.php', NULL , ['title'=> 'Admin - Edit Guest'], ['css'=>'../css/admin.css']); 
     break;
     case 'editguest':
-        getLayout('main', 'editguest.php', NULL , ['title'=> 'Admin Dashboard'], ['css'=>'../css/admin.css']); 
+        getLayout('main', 'editguest.php', NULL , ['title'=> 'Admin - Edit Guest'], ['css'=>'../css/admin.css']); 
     break;
     case 'status':
-        getLayout('main', 'status.php', NULL , ['title'=> 'Admin Dashboard'], ['css'=>'../css/admin.css']); 
+        getLayout('location', 'status.php', NULL , ['title'=> 'Admin - Guest Status'], ['css'=>'../css/admin.css']); 
+    break;
+    case 'location_settings':
+        getLayout('location', 'settings.php', NULL , ['title'=> 'Admin - Guest Status'], ['css'=>'../css/admin.css']); 
     break;
     case 'checkin':
         getLayout('main', 'checkin.php', NULL , ['title'=> 'Admin Dashboard'], ['css'=>'../css/admin.css']); 

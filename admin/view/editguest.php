@@ -5,8 +5,11 @@ $conn = new Mysql();
 $id = filter_input(INPUT_GET, 'loc');
 //if id is not null, then load the location up
 if (!is_null($id))  $location = $conn->getLocationById($id) ;
-var_dump($location);
-$guests = $conn->getGuests();
+
+$guest_id = filter_input(INPUT_GET, 'guestId');
+
+$guest = $conn->getGuestById($guest_id);
+var_dump($guest);
 ?>
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -22,15 +25,15 @@ $guests = $conn->getGuests();
 <form action="?" method="post" class="row g-3 needs-validation" novalidate>
   <div class="col-md-6">
     <label for="guestFirstName" class="form-label">First</label>
-    <input type="text" class="form-control" name="guest[FirstName]" id="guestFirstName" required>
+    <input type="text" class="form-control" name="guest[FirstName]" id="guestFirstName" <?php echo ($fname = $guest->getFirstName()) ? 'value="' . $fname . '"' : 'placeholder="First Name"' ?> required>
   </div>
   <div class="col-md-6">
-    <label for="guestLastName" class="form-label">Last</label>
-    <input type="text" class="form-control" name="guest[LastName]" id="guestLastName" required>
+    <label for="guestLastName" class="form-label">Last</label>bdate
+    <input type="text" class="form-control" name="guest[LastName]" id="guestLastName" <?php echo ($lname = $guest->getLastName()) ? 'value="' . $lname . '"' : 'placeholder="Last Name"' ?> required>
   </div>
   <div class="col-6">
     <label for="guestBirthdate" class="form-label">Birthdate</label>
-    <input type="date" class="form-control" name="guest[Birthdate]" id="guestBirthdate" required>
+    <input type="date" class="form-control" name="guest[Birthdate]" id="guestBirthdate" <?php echo ($bdate = $guest->getBirthdate()) ? 'value="' . $bdate . '"' : '' ?> required>
   </div>
   <!-- <div class="col-6">
     <div class="form-check">
@@ -48,8 +51,7 @@ $guests = $conn->getGuests();
   </div> -->
   
   <div class="col-12">
-    <button type="submit" class="btn btn-primary">Create Guest</button>
-    <button type="submit" class="btn btn-outline-primary">Create Guest & Check In</button>
+    <button type="submit" class="btn btn-primary">Update Guest</button>
   </div>
   <input type="hidden" name="guestId" value="<?/*= $guest->getId() ;*/?>">
   <input type="hidden" name="postAction" value="update">

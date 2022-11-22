@@ -1,58 +1,10 @@
 <?php
-$conn = new Mysql();
-
-//todo - get the orginization id from the url
-$org_id = 1;
-
-//get the location id ('loc=') from the url
-$loc_id = filter_input(INPUT_GET, 'loc');
-
-//if id is not null, then load the location up
-if (!is_null($loc_id))  $location = $conn->getLocationFull($loc_id) ;
-
-//set the operating date
-$op_date = $location->getOpDate();
-
 $guests = $conn->getGuests();
 ?>
-
-<div id="top"></div>
-
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2"><?php echo $location->getName(); ?><span class="status <?php echo $location->getStatusString(); ?>"><?php echo $location->getStatusString(); ?><span></h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
-        <div class="toolbar-text me-2"><?php echo (isset($op_date)) ? '<p>Operating Date: ' . date("m/d/Y", strtotime($op_date)) : ''; ?></p></div>
-        <div class="btn-group me-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="<?php echo ($location->getStatus()) ? 'closeLocation()' : 'openLocation()' ; ?>"><?php echo ($location->getStatus()) ? 'Close Location' : 'Open Location' ; ?></button>
-            <button type="button" class="btn btn-sm btn-outline-secondary">Settings</button>
-            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-        </div>
-        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-            <span data-feather="calendar" class="align-text-bottom"></span>
-            This week
-        </button>
-    </div>
-</div>
 
 
 <div class="row">
   <div class="col-sm-6">
-    <!-- <table class="table">
-      <tbody>
-        <tr>
-          <th scope="row">Checked in Staff/Volunteers</th>
-          <td><a href="#">0</a></td>
-        </tr>
-        <tr>
-          <th scope="row">Checked in Guests</th>
-          <td><a href="?action=status&loc=<?php echo $loc_id; ?>"><?php echo $location->getCapacity()-$location->getAvailability(); ?></a></td>
-        </tr>
-        <tr>
-          <th scope="row">Available Beds</th>
-          <td><a href="#"><?php echo $location->getAvailability(); ?></a></td>
-        </tr>
-      </tbody>
-    </table> -->
     <div class="list-group">
       <a href="#" class="text-decoration-none list-group-item list-group-item-action d-flex justify-content-between align-items-center">
         Checked in Staff/Volunteers
@@ -62,7 +14,7 @@ $guests = $conn->getGuests();
         Checked in Guests
         <span class="badge rounded-pill text-bg-secondary"><?php echo $location->getCapacity()-$location->getAvailability(); ?></span>
       </a>
-      <a href="?action=status&loc=<?php echo $id; ?>" class="text-decoration-none list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+      <a href="?action=status&loc=<?php echo $loc_id; ?>" class="text-decoration-none list-group-item list-group-item-action d-flex justify-content-between align-items-center">
         Available Beds
         <span class="badge rounded-pill text-bg-primary"><?php echo $location->getAvailability(); ?></span>
       </a>
@@ -90,12 +42,11 @@ $guests = $conn->getGuests();
 
 
 
+<div class="m-4"></div>
 
 
 
-
-<h1>Guest Check-In</h1>
-
+<h3>Guest Check-In</h3>
 <form id="guestCheckIn" class="row g-2">
     <div class="input-group">
         <input id="guestlistInput" class="form-control col-auto" list="guestlistOptions" placeholder="Search Guests..." autocomplete="off">

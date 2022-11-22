@@ -1,36 +1,8 @@
 <?php
-$conn = new Mysql();
-
-//todo - get the orginization id from the url
-$org_id = 1;
-
-
-//get the location id ('loc=') from the url
-$loc_id = filter_input(INPUT_GET, 'loc');
-//if id is not null, then load the location up
-if (!is_null($loc_id))  $location = $conn->getLocationById($loc_id) ;
-
-//set the operating date
-$op_date = $location->getOpDate();
-
 $guests = $conn->getGuests();
 
 $guestStatus = $conn->getGuestStatus($loc_id,$op_date);
 ?>
-
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2"><?php echo $location->getName(); ?></h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
-        <div class="btn-group me-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
-        </div>
-        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-            <span data-feather="calendar" class="align-text-bottom"></span>
-            This week
-        </button>
-    </div>
-</div>
 
 <h2>Guest Status</h2>
 

@@ -21,7 +21,7 @@ $guests = $conn->getGuests();
 <form action="?" method="post" class="row g-3 needs-validation" novalidate>
   <div class="col-md-6">
     <label for="guestFirstName" class="form-label">First</label>
-    <input type="text" class="form-control" placeholder="First Name" name="guest[FirstName]" id="guestFirstName" required>
+    <input type="text" class="form-control" placeholder="First Name" name="guest[FirstName]" id="guestFirstName" autocomplete="off" required>
     <div class="invalid-feedback">
       Please provide a valid name.
     </div>
@@ -31,7 +31,7 @@ $guests = $conn->getGuests();
   </div>
   <div class="col-md-6">
     <label for="guestLastName" class="form-label">Last</label>
-    <input type="text" class="form-control" placeholder="Last Name" name="guest[LastName]" id="guestLastName" required>
+    <input type="text" class="form-control" placeholder="Last Name" name="guest[LastName]" id="guestLastName" autocomplete="off" required>
     <div class="invalid-feedback">
       Please provide a valid name.
     </div>

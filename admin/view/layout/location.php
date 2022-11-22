@@ -7,6 +7,7 @@ $conn = new Mysql();
 $org_id = 1;
 ?>
 
+
 <!doctype html>
 <html lang="en">
     <head>
@@ -21,7 +22,6 @@ $org_id = 1;
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
 
 
-        
         <?php
         //if css is passed in the getLayout function spit it out here
         if ( isset($css )) {
@@ -46,12 +46,52 @@ $org_id = 1;
             <?php include 'view/partials/header.php' ?>
         </header>
 
-
         <div class="container-fluid">
             <div class="row">
             <?php include 'view/partials/sidebar.php' ?>
             
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+
+            <div id="top"></div>
+            
+            <?php 
+            //get the location id ('loc=') from the url
+            $loc_id = filter_input(INPUT_GET, 'loc');
+
+            //if id is not null, then load the location up
+
+            if (!is_null($loc_id))  $location = $conn->getLocationFull($loc_id) ;
+            else die;
+            //set the operating date
+            $op_date = $location->getOpDate();
+            
+            ?>
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2"><?php echo $location->getName(); ?></h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="toolbar-text me-2"><?php echo (isset($op_date)) ? '<p>Operating Date: ' . date("m/d/Y", strtotime($op_date)) : ''; ?></p></div>
+                        
+                        <div class="btn-group me-2">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="badge border border-dark rounded-pill status-<?php echo $location->getStatusString(); ?>">&nbsp;</span> 
+                            <?php echo ($location->getStatus()) ? 'Open' : 'Closed' ; ?>
+                            </button>
+                            <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" onclick="<?php echo ($location->getStatus()) ? 'closeLocation()' : 'openLocation()' ; ?>"><?php echo ($location->getStatus()) ? 'Close Location' : 'Open Location' ; ?></a></li>
+                            <li><a class="dropdown-item" href="#">Change Operating Date</a></li>
+                            </ul>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="window.location.href='?action=location_settings&loc=<?php echo $location->getId(); ?>'">Settings</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                            <span data-feather="calendar" class="align-text-bottom"></span>
+                            This week
+                        </button>
+                    </div>
+                </div>
+
                 <?php include 'view/' . $content ; ?>
             </main>
         

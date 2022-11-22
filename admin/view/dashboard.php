@@ -1,12 +1,11 @@
 <?php
-$conn = new Mysql();
-
 //get the location id ('loc=') from the url
 $id = filter_input(INPUT_GET, 'loc');
 //if id is not null, then load the location up
 $date = '2022-11-15';
 $locations = $conn->getLocationsFull( $date);
 $guests = $conn->getGuests();
+
 ?>
 
 
@@ -36,7 +35,7 @@ $guests = $conn->getGuests();
   ?>  
 
   <div class="col-sm-6 p-3">
-    <h1 class="h4"><a class="text-decoration-none" href="?action=location&loc=<?php echo $id; ?>"><?php echo $name; ?></a> <span class="status <?php echo $status; ?>"><?php echo $status; ?></span></h1>
+    <h1 class="h4"><a class="text-decoration-none" href="?action=location&loc=<?php echo $id; ?>"><?php echo $name; ?></a> <span class="status status-<?php echo $status; ?>"><?php echo $status; ?></span></h1>
     <div class="list-group">
       <a href="#" class="text-decoration-none list-group-item list-group-item-action d-flex justify-content-between align-items-center">
         Checked in Staff/Volunteers

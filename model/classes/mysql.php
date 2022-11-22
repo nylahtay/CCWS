@@ -155,6 +155,34 @@ class Mysql extends Dbconfig
 
 
 
+    //Method to retrive all the guests in the DB
+    //This method returns an array of all the guests as Guest objects.
+    function getGuestById($id)
+    {
+        
+
+        //Database connection
+        $this->connect();
+        $this->sqlQuery = "SELECT u.usr_id, u.usr_username, u.usr_auth, u.usr_email, u.usr_phone, u.usr_fname, u.usr_lname, u.usr_notes, g.guest_birthdate, g.guest_pet, g.guest_family_group FROM users AS u JOIN guests AS g ON u.usr_id = g.usr_id where u.usr_id = $id";
+        $result = $this->conn->query($this->sqlQuery);
+
+        //add each row into a new guest object in the array
+        while ($row = $result->fetch_assoc()) {
+            $guest = new Guest($row['usr_id'], $row['usr_username'], $row['usr_auth'], $row['usr_email'], $row['usr_phone'], $row['usr_fname'], $row['usr_lname'],  $row['usr_notes'],  $row['guest_birthdate'],  $row['guest_pet'],  $row['guest_family_group']);
+            // $guest->setProfileImg($row['usr_profile_img']);
+            // $guest->setGuestId($row['cus_id']);
+            // $guest->setNotes($row['cus_notes']);
+        }
+
+        //disconnect from the DB
+        self::disconnect();
+
+        //return the array of Guest objects
+        return $guest;
+    }
+
+
+
     //Method to Check in Guests
     function checkinGuest($org_id,$loc_id, $usr_id, $op_date, $checkin)
     {

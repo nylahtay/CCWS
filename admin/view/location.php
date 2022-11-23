@@ -64,8 +64,6 @@ $guests = $conn->getGuests();
 
 
 
-<script src="../js/json/postAjax.js"></script>
-
 
 <script>
 

@@ -98,72 +98,72 @@ $org_id = 1;
             </div>
         </div>
 
-
+        <script src="../js/json/postAjax.js"></script>
         <script>
             function openLocation()
-  {
-    //create modal for date question.
+                {
+                    //create modal for date question.
 
-    <?php
-      //generate the current date to be the check in date
-      //YY-MM-DD HH-MM-SS
-      //todo - change date and time to use location's settings for timezone
-      date_default_timezone_set("America/Chicago");
-      $new_op_date = date("Y-m-d");
-    ?>
-
-
-
-    //set the op_date to be the new generated op_date
-    op_date = '<?php echo $new_op_date ?>';
-    alert('opening location: date ' + op_date);
-    //ajax call for user checkin.
-    let jsonPath = "../js/json/location-open.php";
-
-    //call the Ajax to get the results
-    //example postAjax('http://foo.bar/', { p1: 1, p2: 'Hello World' }, function(data){ someFunction(data); });
-    postAjax(jsonPath, { 
-      'api_key': 'todo- create api key',
-      'org_id': '<?php echo $org_id; ?>', 
-      'loc_id': '<?php echo $loc_id; ?>', 
-      'op_date': op_date 
-    }, function(data){ openLocationResult(data); });
-  }
-
-  function openLocationResult(data){
-    alert(data);
-    location.reload();
-  }
+                    <?php
+                    //generate the current date to be the check in date
+                    //YY-MM-DD HH-MM-SS
+                    //todo - change date and time to use location's settings for timezone
+                    date_default_timezone_set("America/Chicago");
+                    $new_op_date = date("Y-m-d");
+                    ?>
 
 
 
-  function closeLocation()
-  {
+                    //set the op_date to be the new generated op_date
+                    op_date = '<?php echo $new_op_date ?>';
+                    alert('opening location: date ' + op_date);
+                    //ajax call for user checkin.
+                    let jsonPath = "../js/json/location-open.php";
 
-    //todo - replace confirm with https://getbootstrap.com/docs/5.2/components/modal/#static-backdrop
+                    //call the Ajax to get the results
+                    //example postAjax('http://foo.bar/', { p1: 1, p2: 'Hello World' }, function(data){ someFunction(data); });
+                    postAjax(jsonPath, { 
+                    'api_key': 'todo- create api key',
+                    'org_id': '<?php echo $org_id; ?>', 
+                    'loc_id': '<?php echo $loc_id; ?>', 
+                    'op_date': op_date 
+                    }, function(data){ openLocationResult(data); });
+                }
 
-    //confirm that they want to take the option
-    var response = confirm("Are you sure you want to continue?\nThis will check out any remaining guests.");
-    if (response == true) {
-      alert('closing location');
-      //ajax call for user checkin.
-      let jsonPath = "../js/json/location-close.php";
+                function openLocationResult(data){
+                    alert(data);
+                    location.reload();
+                }
 
-      //call the Ajax to get the results
-      //example postAjax('http://foo.bar/', { p1: 1, p2: 'Hello World' }, function(data){ someFunction(data); });
-      postAjax(jsonPath, { 
-        'api_key': 'todo- create api key',
-        'org_id': '<?php echo $org_id; ?>', 
-        'loc_id': '<?php echo $loc_id; ?>', 
-      }, function(data){ closeLocationResult(data); });
-    }
-    
-  }
 
-  function closeLocationResult(data){
-    alert(data);
-    location.reload();
-  }
+
+                function closeLocation()
+                {
+
+                    //todo - replace confirm with https://getbootstrap.com/docs/5.2/components/modal/#static-backdrop
+
+                    //confirm that they want to take the option
+                    var response = confirm("Are you sure you want to continue?\nThis will check out any remaining guests.");
+                    if (response == true) {
+                    alert('closing location');
+                    //ajax call for user checkin.
+                    let jsonPath = "../js/json/location-close.php";
+
+                    //call the Ajax to get the results
+                    //example postAjax('http://foo.bar/', { p1: 1, p2: 'Hello World' }, function(data){ someFunction(data); });
+                    postAjax(jsonPath, { 
+                        'api_key': 'todo- create api key',
+                        'org_id': '<?php echo $org_id; ?>', 
+                        'loc_id': '<?php echo $loc_id; ?>', 
+                    }, function(data){ closeLocationResult(data); });
+                    }
+                    
+                }
+
+                function closeLocationResult(data){
+                    alert(data);
+                    location.reload();
+                }
         </script>
 
 

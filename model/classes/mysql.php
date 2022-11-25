@@ -399,15 +399,17 @@ class Mysql extends Dbconfig
         foreach ($locationIds as $id)
         {
 
-            $this->sqlQuery = "SELECT loc_id, loc_name, loc_address_street, loc_address_street_2, loc_address_city, loc_address_state, loc_serves, loc_capacity, loc_status, loc_capacity-(SELECT count(usr_id) FROM guest_status WHERE loc_id = $id AND gs_op_date = '$date' AND gs_checkout IS NULL) AS loc_availability FROM location WHERE loc_id = $id";
-            $result = $this->conn->query($this->sqlQuery);
+            $location = self::getLocationFull($id);
+            $locationsFull[] = $location;
+            // $this->sqlQuery = "SELECT loc_id, loc_name, loc_address_street, loc_address_street_2, loc_address_city, loc_address_state, loc_serves, loc_capacity, loc_status, loc_capacity-(SELECT count(usr_id) FROM guest_status WHERE loc_id = $id AND gs_op_date = '$date' AND gs_checkout IS NULL) AS loc_availability FROM location WHERE loc_id = $id";
+            // $result = $this->conn->query($this->sqlQuery);
 
-            //add each row into a new guest object in the array
-            while ($row = $result->fetch_assoc()) {
-                $location = new Location($row['loc_id'], $row['loc_name'], $row['loc_address_street'], $row['loc_address_street_2'], $row['loc_address_city'], $row['loc_address_state'], NULL,  NULL,  $row['loc_serves'],  $row['loc_capacity'], $row['loc_status']);
-                $location->setAvailability($row['loc_availability']);
-                $locationsFull[] = $location;
-            }
+            // //add each row into a new guest object in the array
+            // while ($row = $result->fetch_assoc()) {
+            //     $location = new Location($row['loc_id'], $row['loc_name'], $row['loc_address_street'], $row['loc_address_street_2'], $row['loc_address_city'], $row['loc_address_state'], NULL,  NULL,  $row['loc_serves'],  $row['loc_capacity'], $row['loc_status']);
+            //     $location->setAvailability($row['loc_availability']);
+            //     $locationsFull[] = $location;
+            // }
 
         }
 

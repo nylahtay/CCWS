@@ -2,6 +2,10 @@
 $guests = $conn->getGuests();
 
 $guestStatus = $conn->getGuestStatus($loc_id,$op_date);
+
+//todo - need to add this to the location class.
+//see if location uses additional fields
+$useAdditionalFields = $location.getUseAdditionalFields();
 ?>
 
 <h2>Guest Status</h2>
@@ -30,10 +34,15 @@ $guestStatus = $conn->getGuestStatus($loc_id,$op_date);
         $checkin = $status[1];
         $checkout = $status[2];
         $usr_id = $status[3];
+        $usr_pet = $status[4];
+        if ($useAdditionalFields){
+            $usr_pet = $status[4];
+        }
     ?>
     <tr>
         <td><input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"></td>
         <td><?php echo $name ?></td>
+        <?php echo ($useAdditionalFields)? '<td>'.$usr_pet.'</td>':''; ?>
         <td><?php echo $checkin ?></td>
         <td><?php echo $checkout ?></td>
         <td><?php echo (is_null($checkout)) ? '<button class="btn btn-sm btn-primary" data-cmd="checkout" data-id="' . $usr_id . '" onclick="checkoutGuest(this)">Check Out</button>' : ' ' ; ?></td>

@@ -63,25 +63,87 @@ $guests = $conn->getGuests();
 <div id="resultID" class="resultID"></div>
 
 
+<!-- Checkin Fields Modal -->
+<!-- this gets called by the javascript guestCheckin() function -->
+<div class="modal fade" id="modal-checkin" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal-checkinLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modal-checkinLabel">Check In</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form class="row g-3 needs-validation" novalidate>
+          <div class="col-md-6">
+            <label for="guestLastName" class="form-label"># of Pets</label>
+            <input type="number" class="form-control" id="guestLastName" autocomplete="off" value="0" required>
+            <div class="invalid-feedback">
+              Please provide a valid name.
+            </div>
+            <div class="valid-feedback">
+              Looks good!
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" id="model-checkin-submit" class="btn btn-primary">Continue Check-In</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END Checkin Fields Modal -->
 
 
 <script>
-
-
-
-  
-
-
-
+  //get the guestCheckIn form
   var form = document.getElementById('guestCheckIn');
-  form.addEventListener('submit', validateform);
+  //on Submit run the guestCheckin 
+  form.addEventListener('submit', guestCheckin);            
+
+  function guestCheckin()
+  {
+    //prevent the default submiting of the form
+    event.preventDefault();
+
+    //get the guestCheckin field input
+    let inputField = document.getElementById('guestlistInput');
+
+    //if the input is blank, do nothing
+    //todo - if the input doesn't match a guest, use a new model to alert and allow them to go to the add guest page.
+    if (inputField.value == ""){
+      //do nothing
+    }
+    else {
+      //check to see if we need the model
+      let activeModal = true; //todo - this should check the location settings to see if there are additional fields required. 
+
+      if (activeModal)
+      {
+        //create the Modal for additional checkin fields
+        var myModal = new bootstrap.Modal(document.getElementById('modal-checkin'));
+        //show the model
+        myModal.show();
+
+        let button = document.getElementById("model-checkin-submit");
+        //onclick hide the modal and run the checkin
+        button.addEventListener("click", function () {myModal.hide(); validateform();});
+      }
+      else {
+        //go ahead and run the checkin
+        validateform();
+      }
+    }
+  }
+
+
 
   //this function will grab the selected item from the datalist
   //from https://jsfiddle.net/nylahtay/4g9sykLe/20/
   function validateform() {
 
-    //prevent the default submiting of the form
-    event.preventDefault();
+    
     var selectedOption = guestlistOptions.options.namedItem(guestlistInput.value);
     if (selectedOption) {
         var selectedId = selectedOption.getAttribute('data-id');
@@ -90,6 +152,10 @@ $guests = $conn->getGuests();
     } else {
         var result = "No ID available for value: " + guestlistInput.value;
     }
+    
+    
+
+
     document.getElementById('resultID').textContent = result; 
     // Can also use : 
     // inputElement = document.getElementById("guestlistInput");
@@ -104,14 +170,15 @@ $guests = $conn->getGuests();
 
     //call the Ajax to get the results
     //example postAjax('http://foo.bar/', { p1: 1, p2: 'Hello World' }, function(data){ someFunction(data); });
-    postAjax(jsonPath, { 
+    
+    /*postAjax(jsonPath, { 
       'api_key': 'todo- create api key',
       'org_id': '<?php echo $org_id; ?>', 
       'loc_id': '<?php echo $loc_id; ?>', 
       'usr_id': selectedId, 
       'op_date': '<?php echo $op_date; ?>' 
     }, function(data){ ajaxResponse(data); });
-
+    */
 
     //funtion to handle the response back from the postAjax
     function ajaxResponse(data)

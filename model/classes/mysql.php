@@ -215,7 +215,7 @@ class Mysql extends Dbconfig
 
 
     //Method to Check in Guests
-    function checkinGuest($org_id,$loc_id, $usr_id, $op_date, $checkin)
+    function checkinGuest($org_id,$loc_id, $usr_id, $op_date, $checkin, $additionalFields = NULL)
     {
         //create array of guest objects
         $result = array();
@@ -302,14 +302,23 @@ class Mysql extends Dbconfig
 
 
     //Method to retrive the guests status for a location
-    function getGuestStatus($id, $date)
+    function getGuestStatus($id, $date, $useAdditionalFields = 0)
     {
         //create array of guest objects
         $guestStatus = array();
 
         //Database connection
         $this->connect();
-        $this->sqlQuery = "SELECT u.usr_fname, u.usr_lname, gs.gs_checkin, gs.gs_checkout, gs.usr_id FROM guest_status as gs JOIN users as u ON u.usr_id = gs.usr_id WHERE loc_id = $id and gs_op_date = '$date'";
+
+        //if useadditionalFields is turned on use a different query
+        if($useAdditionalFields)
+        {
+            //todo - need to join the new table locaion_
+            $this->sqlQuery = "SELECT u.usr_fname, u.usr_lname, gs.gs_checkin, gs.gs_checkout, gs.usr_id FROM guest_status as gs JOIN users as u ON u.usr_id = gs.usr_id WHERE loc_id = $id and gs_op_date = '$date'";
+        }
+        else {
+            $this->sqlQuery = "SELECT u.usr_fname, u.usr_lname, gs.gs_checkin, gs.gs_checkout, gs.usr_id FROM guest_status as gs JOIN users as u ON u.usr_id = gs.usr_id WHERE loc_id = $id and gs_op_date = '$date'";
+        }
         $result = $this->conn->query($this->sqlQuery);
 
         //add each row into a new guest object in the array
